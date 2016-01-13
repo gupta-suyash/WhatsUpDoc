@@ -1,0 +1,20 @@
+01/11/2016
+
+- 	The Rails source code contains several parts, among which folder of our interest is activerecord. 
+- 	The base file activerecord.rb is sort of wrapper that loads all the pertaining classes and modules.
+	It makes use of require and autoload. 
+	Require is like "import" in C or Java, while autoload can be termed as a lazy version of require that loads a class only when needed !
+-	Our current target is to find the relevant implementations for the CRUD methods (Create, Read, Update and Delete).
+	The CRUD methods are used by active-record and are passed to its sub-classes for accessing data.
+
+
+01/12/2016
+-	The rails subfolder consists of a ruby file that helps to generate rails migrations and models (thats my guess as per now).
+-	There are some templates inside these folders which I believe may be some example implementation.
+-	In the file "active_record/connection_adapters/abstract/database_statements.rb" we have some information about the isolation levels. 
+	My current understanding suggests that the support for 4 transaction isolation levels has been provided, i.e. 
+	read_uncommitted, read_committed, repeatable_read and serializable.
+-	This file also has methods for "starting a transaction" at an appropriate isolation level --> def begin_isolated_db_transaction(isolation).
+	Other methods include, "starting a transaction", "committing a transaction", "rollbacking a transaction" and so on.
+
+	
