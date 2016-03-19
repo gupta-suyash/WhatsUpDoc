@@ -1,0 +1,751 @@
+  [1m[36m (0.9ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL) [0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.7ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+Migrating to CreateLinks (20160315224029)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TABLE "links" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "id1" integer, "id2" integer, "linktype" integer, "visibility" integer, "data" varchar, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315224029"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateCounts (20160315224057)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "counts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "count" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315224057"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateNodes (20160315224141)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TABLE "nodes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type" integer, "version" integer, "time" integer, "data" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315224141"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)  [["id1", 1], ["id2", 2], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-15 22:45:24.077559"], ["updated_at", "2016-03-15 22:45:24.077559"]]
+  [1m[36m (1.4ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "nodes" ("version", "time", "data", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["version", 1], ["time", 2010], ["data", "abc"], ["created_at", "2016-03-15 22:48:01.747533"], ["updated_at", "2016-03-15 22:48:01.747533"]]
+  [1m[35m (1.7ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveTypeFromNode (20160315224944)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.5ms)[0m  [1mCREATE TEMPORARY TABLE "anodes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type" integer, "version" integer, "time" integer, "data" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "nodes"
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "anodes" ("id","type","version","time","data","created_at","updated_at") VALUES (1, NULL, 1, 2010, 'abc', '2016-03-15 22:48:01.747533', '2016-03-15 22:48:01.747533')[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "nodes"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "nodes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "version" integer, "time" integer, "data" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "anodes"
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nodes" ("id","version","time","data","created_at","updated_at") VALUES (1, 1, 2010, 'abc', '2016-03-15 22:48:01.747533', '2016-03-15 22:48:01.747533')[0m
+  [1m[35m (0.4ms)[0m  DROP TABLE "anodes"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315224944"]]
+  [1m[35m (1.7ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddTypeToNodes (20160315225204)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.7ms)[0m  [1mALTER TABLE "nodes" ADD "tnode" integer[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160315225204"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "nodes" ("version", "time", "data", "tnode", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["version", 1], ["time", 2010], ["data", "abcd"], ["tnode", 1], ["created_at", "2016-03-15 22:54:32.538198"], ["updated_at", "2016-03-15 22:54:32.538198"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[35m (2.1ms)[0m  SELECT * from nodes
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  rollback transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveContFromCount (20160315230753)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (1.1ms)[0m  [1mCREATE TEMPORARY TABLE "acounts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "count" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "counts"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "counts"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "counts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.0ms)[0m  [1mSELECT * FROM "acounts"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "acounts"
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315230753"]]
+  [1m[35m (1.7ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddCountValToCounts (20160315230908)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (1.4ms)[0m  [1mALTER TABLE "counts" ADD "countval" integer[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160315230908"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddIndexToLinks (20160315231826)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (1.0ms)[0m  CREATE UNIQUE INDEX "index_links_on_id1_and_id2_and_linktype" ON "links" ("id1", "id2", "linktype")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315231826"]]
+  [1m[35m (1.6ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+
+  [1m[36m (0.4ms)[0m  [1mSELECT * from links[0m
+  [1m[36m (0.6ms)[0m  [1mSELECT * from links[0m
+  [1m[35m (1.0ms)[0m  TRUNCATE TABLE links
+  [1m[36m (0.9ms)[0m  [1mTRUNCATE TABLE links[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["id1", 1], ["id2", 2], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-15 23:27:18.196699"], ["updated_at", "2016-03-15 23:27:18.196699"]]
+  [1m[35m (0.1ms)[0m  rollback transaction
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)  [["id1", 1], ["id2", 2], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-15 23:27:43.816971"], ["updated_at", "2016-03-15 23:27:43.816971"]]
+  [1m[36m (0.1ms)[0m  [1mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddIndexToCounts (20160315234802)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.4ms)[0m  CREATE UNIQUE INDEX "index_counts_on_id_and_link_type" ON "counts" ("id", "link_type")
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160315234802"]]
+  [1m[35m (1.7ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddLinkReferencesToCount (20160316003444)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "counts" ADD "link_id" integer[0m
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+[0m
+  [1m[35m (0.2ms)[0m  CREATE  INDEX "index_counts_on_link_id" ON "counts" ("link_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160316003444"]]
+  [1m[35m (0.7ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "counts" ("link_type", "version", "time", "countval", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["created_at", "2016-03-16 00:40:41.111165"], ["updated_at", "2016-03-16 00:40:41.111165"]]
+  [1m[36m (2.0ms)[0m  [1mcommit transaction[0m
+  [1m[35m (4.1ms)[0m  SELECT * from counts
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "counts" ("link_type", "version", "time", "countval", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["created_at", "2016-03-16 00:44:01.665855"], ["updated_at", "2016-03-16 00:44:01.665855"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveIndexFromCounts (20160316005221)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id_and_link_type' AND type='index'
+
+  [1m[36m (0.4ms)[0m  [1mDROP INDEX "index_counts_on_id_and_link_type"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316005221"]]
+  [1m[36m (1.7ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddIdnToCounts (20160316005812)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "counts" ADD "id1" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316005812"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddNIndexToCounts (20160316010007)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (0.3ms)[0m  [1mCREATE UNIQUE INDEX "index_counts_on_id1_and_link_type" ON "counts" ("id1", "link_type")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316010007"]]
+  [1m[36m (1.8ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id1_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id1_and_link_type' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+[0m
+  [1m[36m (2.0ms)[0m  [1mDELETE from counts[0m
+  [1m[35m (0.7ms)[0m  VACCUM
+  [1m[36m (6.7ms)[0m  [1mVACUUM[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "counts" ("link_type", "version", "time", "countval", "id1", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["id1", 1], ["created_at", "2016-03-16 01:04:16.788483"], ["updated_at", "2016-03-16 01:04:16.788483"]]
+  [1m[35m (1.6ms)[0m  commit transaction
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (6.8ms)[0m  INSERT INTO "counts" ("link_type", "version", "time", "countval", "id1", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["id1", 1], ["created_at", "2016-03-16 01:04:29.565862"], ["updated_at", "2016-03-16 01:04:29.565862"]]
+  [1m[36m (0.1ms)[0m  [1mrollback transaction[0m
+  [1m[36m (4.2ms)[0m  [1mDELETE from counts[0m
+  [1m[35m (14.0ms)[0m  VACUUM
+  [1m[36m (9.7ms)[0m  [1mDELETE from links[0m
+  [1m[35m (15.1ms)[0m  VACUUM
+  [1m[36m (7.5ms)[0m  [1mDELETE from nodes[0m
+  [1m[35m (13.2ms)[0m  VACUUM
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "counts" ("link_type", "version", "time", "countval", "id1", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["id1", 1], ["created_at", "2016-03-16 01:06:06.804408"], ["updated_at", "2016-03-16 01:06:06.804408"]]
+  [1m[36m (1.6ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "counts" ("link_type", "version", "time", "countval", "id1", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["id1", 1], ["created_at", "2016-03-16 01:07:39.636113"], ["updated_at", "2016-03-16 01:07:39.636113"]]
+  [1m[35m (0.1ms)[0m  rollback transaction
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)  [["id1", 1], ["id2", 2], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-16 01:08:25.147955"], ["updated_at", "2016-03-16 01:08:25.147955"]]
+  [1m[36m (1.8ms)[0m  [1mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveIndexuFromCounts (20160316013407)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_id1_and_link_type' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_id1_and_link_type' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (1.6ms)[0m  [1mDROP INDEX "index_counts_on_id1_and_link_type"[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316013407"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveIndexFromLinks (20160316013536)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  rollback transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveIndexFromLinks (20160316013536)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  rollback transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveIndexFromLinks (20160316013536)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_id1_and_id2_and_linktype' AND type='index'
+[0m
+  [1m[35m (0.3ms)[0m  DROP INDEX "index_links_on_id1_and_id2_and_linktype"
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160316013536"]]
+  [1m[35m (1.8ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (2.0ms)[0m  [1mDELETE from counts[0m
+  [1m[35m (3.5ms)[0m  DELETE from links
+  [1m[36m (5.3ms)[0m  [1mVACUUM[0m
+  [1m[35m (0.5ms)[0m  SELECT * from counts
+  [1m[36m (0.3ms)[0m  [1mSELECT * from links[0m
+  [1m[35mCount Exists (0.1ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+  [1m[35mCount Exists (0.2ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "counts" ("link_type", "version", "time", "countval", "id1", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["link_type", 2], ["version", 1], ["time", 2010], ["countval", 0], ["id1", 1], ["created_at", "2016-03-16 01:41:06.533522"], ["updated_at", "2016-03-16 01:41:06.533522"]]
+  [1m[35m (2.2ms)[0m  commit transaction
+  [1m[36m (0.3ms)[0m  [1mSELECT * from counts[0m
+  [1m[35mLink Exists (0.2ms)[0m  SELECT  1 AS one FROM "links" WHERE ("links"."id1" = 1 AND "links"."id2" = 2 AND "links"."linktype" = 0) LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mLink Exists (0.2ms)[0m  SELECT  1 AS one FROM "links" WHERE ("links"."id1" = 1 AND "links"."id2" = 2 AND "links"."linktype" = 0) LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["id1", 1], ["id2", 2], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-16 01:43:42.110479"], ["updated_at", "2016-03-16 01:43:42.110479"]]
+  [1m[35m (1.4ms)[0m  commit transaction
+  [1m[36m (0.2ms)[0m  [1mSELECT * from links[0m
+  [1m[36m (2.0ms)[0m  [1mDELETE from counts[0m
+  [1m[35m (2.3ms)[0m  DELETE from links
+  [1m[36m (6.3ms)[0m  [1mVACUUM[0m
+  [1m[35mCount Exists (0.1ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveFkIndexFromCounts (20160316021119)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.6ms)[0m  DROP INDEX "index_counts_on_link_id"
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160316021119"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to RemoveLinkReferencesFromCounts (20160316191739)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TEMPORARY TABLE "acounts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "link_id" integer, "id1" integer) 
+  [1m[36m (0.3ms)[0m  [1mSELECT * FROM "counts"[0m
+  [1m[35m (0.6ms)[0m  DROP TABLE "counts"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "counts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "id1" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "acounts"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "acounts"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316191739"]]
+  [1m[36m (1.0ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[36m (0.4ms)[0m  [1mSELECT * from links[0m
+  [1m[35mLink Exists (0.1ms)[0m  SELECT  1 AS one FROM "links" WHERE ("links"."id1" = 1 AND "links"."id2" = 2 AND "links"."linktype" = 0) LIMIT 1
+  [1m[36mLink Exists (0.1ms)[0m  [1mSELECT  1 AS one FROM "links" WHERE ("links"."id1" = 1 AND "links"."id2" = 2 AND "links"."linktype" = 0) LIMIT 1[0m
+  [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "nodes" ("version", "time", "data", "tnode", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["version", 1], ["time", 2016], ["data", "abc"], ["tnode", 1], ["created_at", "2016-03-16 21:36:23.677702"], ["updated_at", "2016-03-16 21:36:23.677702"]]
+  [1m[36m (1.5ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  SELECT * from nodes
+  [1m[36m (0.4ms)[0m  [1mSELECT * from links[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "nodes" ("version", "time", "data", "tnode", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["version", 1], ["time", 2016], ["data", "abcd"], ["tnode", 1], ["created_at", "2016-03-16 21:38:10.158102"], ["updated_at", "2016-03-16 21:38:10.158102"]]
+  [1m[35m (1.7ms)[0m  commit transaction
+  [1m[36m (0.4ms)[0m  [1mSELECT * from nodes[0m
+  [1m[35mLink Exists (0.2ms)[0m  SELECT  1 AS one FROM "links" WHERE ("links"."id1" = 3 AND "links"."id2" = 4 AND "links"."linktype" = 1) LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mLink Exists (1.3ms)[0m  SELECT  1 AS one FROM "links" WHERE ("links"."id1" = 3 AND "links"."id2" = 4 AND "links"."linktype" = 1) LIMIT 1
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "links" ("id1", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["id1", 3], ["id2", 4], ["linktype", 1], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-16 21:39:04.070894"], ["updated_at", "2016-03-16 21:39:04.070894"]]
+  [1m[35m (1.6ms)[0m  commit transaction
+  [1m[36m (0.3ms)[0m  [1mSELECT * from links[0m
+  [1m[35mNode Load (0.3ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1  [["id", 3]]
+  [1m[36mNode Load (0.1ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mLink Load (0.3ms)[0m  [1mSELECT "links".* FROM "links" WHERE "links"."id1" = ?[0m  [["id1", 3]]
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "links" WHERE "links"."id" = ?  [["id", 4]]
+  [1m[36mLink Load (0.2ms)[0m  [1mSELECT "links".* FROM "links" WHERE "links"."id2" = ?[0m  [["id2", 3]]
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "nodes" WHERE "nodes"."id" = ?  [["id", 3]]
+  [1m[36m (1.6ms)[0m  [1mcommit transaction[0m
+  [1m[35m (2.9ms)[0m  SELECT * from links
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddNodeReferencesToCounts (20160316215846)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "counts" ADD "node_id" integer[0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.2ms)[0m  [1mCREATE  INDEX "index_counts_on_node_id" ON "counts" ("node_id")[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316215846"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35mCount Exists (4.5ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36m (0.3ms)[0m  [1mSELECT * from counts[0m
+  [1m[35mCount Exists (1.2ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mCount Exists (4.3ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35m (0.3ms)[0m  SELECT * from nodes
+  [1m[36mCount Exists (4.5ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  rollback transaction
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35mCount Exists (3.3ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mCount Exists (0.1ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35mNode Load (0.3ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1  [["id", 4]]
+  [1m[36mCount Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "counts" WHERE ("counts"."id1" = 1 AND "counts"."link_type" = 2) LIMIT 1[0m
+  [1m[35mNode Load (0.1ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1  [["id", 3]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveCidFromCounts (20160316223159)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mCREATE TEMPORARY TABLE "acounts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "id1" integer, "node_id" integer) [0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+
+  [1m[36m (0.0ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  CREATE  INDEX "tindex_acounts_on_node_id" ON "acounts" ("node_id")
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "counts"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "counts"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "counts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "node_id" integer) [0m
+  [1m[35m (0.0ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_acounts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_acounts_on_node_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1mCREATE  INDEX "index_counts_on_node_id" ON "counts" ("node_id")[0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "acounts"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "acounts"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316223159"]]
+  [1m[36m (0.9ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[36mNode Load (3.0ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35mCount Exists (0.2ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."node_id" IS NULL AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mNode Load (3.6ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1[0m  [["id", 4]]
+  [1m[35mCount Exists (0.1ms)[0m  SELECT  1 AS one FROM "counts" WHERE ("counts"."node_id" = 4 AND "counts"."link_type" = 2) LIMIT 1
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddNodeReferencesToLinks (20160316224227)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "links" ADD "node_id" integer[0m
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mCREATE  INDEX "index_links_on_node_id" ON "links" ("node_id")[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316224227"]]
+  [1m[36m (1.6ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_node_id' AND type='index'
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveLid1FromLinks (20160316224440)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mCREATE TEMPORARY TABLE "alinks" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "id1" integer, "id2" integer, "linktype" integer, "visibility" integer, "data" varchar, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "node_id" integer) [0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_node_id' AND type='index'
+
+  [1m[36m (0.0ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  CREATE  INDEX "tindex_alinks_on_node_id" ON "alinks" ("node_id")
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "links"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "links"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "links" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "id2" integer, "linktype" integer, "visibility" integer, "data" varchar, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "node_id" integer) [0m
+  [1m[35m (0.0ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_alinks_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_alinks_on_node_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1mCREATE  INDEX "index_links_on_node_id" ON "links" ("node_id")[0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "alinks"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "alinks"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20160316224440"]]
+  [1m[36m (2.0ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_node_id' AND type='index'
+
+  [1m[36mLink Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "links" WHERE ("links"."node_id" = 4 AND "links"."id2" = 3 AND "links"."linktype" = 0) LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mLink Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "links" WHERE ("links"."node_id" = 4 AND "links"."id2" = 3 AND "links"."linktype" = 0) LIMIT 1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "links" ("node_id", "id2", "linktype", "visibility", "data", "time", "version", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)  [["node_id", 4], ["id2", 3], ["linktype", 0], ["visibility", 1], ["data", "simp-link"], ["time", 2010], ["version", 0], ["created_at", "2016-03-16 22:48:59.861745"], ["updated_at", "2016-03-16 22:48:59.861745"]]
+  [1m[36m (1.4ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "nodes" ("version", "time", "data", "tnode", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["version", 1], ["time", 2016], ["data", "abcd"], ["tnode", 1], ["created_at", "2016-03-16 22:50:08.040955"], ["updated_at", "2016-03-16 22:50:08.040955"]]
+  [1m[35m (2.7ms)[0m  commit transaction
+  [1m[36mNode Load (0.3ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1[0m  [["id", 5]]
+  [1m[35mNode Load (3.5ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1  [["id", 4]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mLink Load (0.2ms)[0m  SELECT "links".* FROM "links" WHERE "links"."node_id" = ?  [["node_id", 4]]
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "links" WHERE "links"."id" = ?[0m  [["id", 1]]
+  [1m[35mLink Load (0.1ms)[0m  SELECT "links".* FROM "links" WHERE "links"."id2" = ?  [["id2", 4]]
+  [1m[36mCount Load (0.1ms)[0m  [1mSELECT  "counts".* FROM "counts" WHERE "counts"."node_id" = ? LIMIT 1[0m  [["node_id", 4]]
+  [1m[35mSQL (0.1ms)[0m  DELETE FROM "nodes" WHERE "nodes"."id" = ?  [["id", 4]]
+  [1m[36m (4.4ms)[0m  [1mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddLinkReferencesToCounts (20160317215704)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "counts" ADD "link_id" integer[0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[35m (0.4ms)[0m  CREATE  INDEX "index_counts_on_link_id" ON "counts" ("link_id")
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160317215704"]]
+  [1m[35m (0.5ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_node_id' AND type='index'
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveLinkReferencesToCounts (20160317220510)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.7ms)[0m  [1mCREATE TEMPORARY TABLE "acounts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "node_id" integer, "link_id" integer) [0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_link_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mCREATE  INDEX "tindex_acounts_on_link_id" ON "acounts" ("link_id")[0m
+  [1m[35m (0.1ms)[0m  CREATE  INDEX "tindex_acounts_on_node_id" ON "acounts" ("node_id")
+  [1m[36m (0.3ms)[0m  [1mSELECT * FROM "counts"[0m
+  [1m[35m (1.2ms)[0m  DROP TABLE "counts"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "counts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "link_type" integer, "time" integer, "version" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "countval" integer, "node_id" integer) [0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_acounts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_acounts_on_node_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_acounts_on_link_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_acounts_on_link_id' AND type='index'
+[0m
+  [1m[35m (0.1ms)[0m  CREATE  INDEX "index_counts_on_node_id" ON "counts" ("node_id")
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "acounts"[0m
+  [1m[35m (0.5ms)[0m  DROP TABLE "acounts"
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20160317220510"]]
+  [1m[35m (1.1ms)[0m  commit transaction
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_counts_on_node_id' AND type='index'
+
+  [1m[36m (0.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_links_on_node_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_links_on_node_id' AND type='index'
+[0m
+  [1m[36mNode Load (0.3ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1[0m  [["id", 5]]
+  [1m[35mNode Load (0.2ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? LIMIT 1  [["id", nil]]
+  [1m[36mNode Load (0.3ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."id" = ? AND "nodes"."data" = ? LIMIT 1[0m  [["id", 5], ["data", "abcd"]]
+  [1m[35mNode Load (0.2ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? AND "nodes"."data" = ? LIMIT 1  [["time", 2016], ["data", "abcd"]]
+  [1m[36mNode Load (4.6ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? AND "nodes"."data" = ? LIMIT 1[0m  [["time", 2017], ["data", "abcd"]]
+  [1m[35mNode Load (1.5ms)[0m  SELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? AND "nodes"."data" = ? LIMIT 1  [["time", 2017], ["data", "abcd"]]
+  [1m[36mNode Load (0.4ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? AND "nodes"."data" = ? LIMIT 1[0m  [["time", 2016], ["data", "abcd"]]
+  [1m[35m (2.4ms)[0m  begin transaction
+  [1m[36mSQL (0.4ms)[0m  [1mUPDATE "nodes" SET "version" = ?, "data" = ?, "tnode" = ?, "updated_at" = ? WHERE "nodes"."id" = ?[0m  [["version", 2], ["data", "xyz"], ["tnode", 2], ["updated_at", "2016-03-19 03:48:15.475587"], ["id", 5]]
+  [1m[35m (0.7ms)[0m  commit transaction
+  [1m[36mNode Load (0.2ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? LIMIT 1[0m  [["time", 2016]]
+  [1m[35m (1.9ms)[0m  begin transaction
+  [1m[36mSQL (0.4ms)[0m  [1mUPDATE "nodes" SET "version" = ?, "updated_at" = ? WHERE "nodes"."id" = ?[0m  [["version", 3], ["updated_at", "2016-03-19 03:53:23.474119"], ["id", 5]]
+  [1m[35m (1.6ms)[0m  commit transaction
+  [1m[36mNode Load (0.1ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? LIMIT 1[0m  [["time", 2016]]
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (1.7ms)[0m  [1mUPDATE "nodes" SET "version" = ?, "updated_at" = ? WHERE "nodes"."id" = ?[0m  [["version", 4], ["updated_at", "2016-03-19 03:53:46.291442"], ["id", 5]]
+  [1m[35m (1.8ms)[0m  commit transaction
+  [1m[36mNode Load (0.2ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? LIMIT 1[0m  [["time", 2016]]
+  [1m[35m (0.2ms)[0m  begin transaction
+  [1m[36mSQL (1.8ms)[0m  [1mUPDATE "nodes" SET "data" = ?, "updated_at" = ? WHERE "nodes"."id" = ?[0m  [["data", "lmn"], ["updated_at", "2016-03-19 03:54:04.209832"], ["id", 5]]
+  [1m[35m (1.8ms)[0m  commit transaction
+  [1m[36mNode Load (0.2ms)[0m  [1mSELECT  "nodes".* FROM "nodes" WHERE "nodes"."time" = ? LIMIT 1[0m  [["time", 2016]]
+  [1m[36mLink Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "links" WHERE ("links"."node_id" = 1 AND "links"."id2" = 2 AND "links"."linktype" = 1) LIMIT 1[0m

@@ -1,0 +1,4 @@
+README
+
+This application provides a thin social networking layer for the Facebook LinkBench benchmark on ruby on rails.
+
