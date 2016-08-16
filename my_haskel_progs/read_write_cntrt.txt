@@ -1,0 +1,4 @@
+forall(a:Withdraw).((so \intersect sameobj)(a,x) => vis(a,x))
+
+forall(a:Write).(b:Write).vis(a,b)^soo(b,x) => vis(b,x)
+
